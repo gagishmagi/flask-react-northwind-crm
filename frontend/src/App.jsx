@@ -10,7 +10,9 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:5000/products")
     .then(response => response.json())
-    .then(products => setProducts(products))
+    .then(products => {
+      setProducts(products)
+    })
   }, [])
   
 
@@ -68,7 +70,7 @@ function App() {
                   DataTable Example
                 </div>
                 <div className="card-body">
-                  <table id="dataProductsSimple">
+                  <table className="table table-bordered">
                     <thead>
                       <tr>
                         <th>ID</th>
@@ -79,23 +81,23 @@ function App() {
                     </thead>
                     <tfoot>
                       <tr>
+                        <th>ID</th>
                         <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
+                        <th>UnitPrice</th>
+                        <th>quantity</th>
                       </tr>
                     </tfoot>
                     <tbody>
                       {
                         Products.map(product => {
-                          <tr>
-                            <td>{product.productID}</td>
-                            <td>{product.name}</td>
-                            <td>{product.unitPrice}</td>
-                            <td>{product.quantity}</td>
-                          </tr>
+                          return (
+                            <tr key={product.product_id}>
+                              <td>{product.product_id}</td>
+                              <td>{product.product_name}</td>
+                              <td>{product.unit_price}</td>
+                              <td>{product.quantity_per_unit}</td>
+                            </tr>
+                          )
                         })
                       }
                     </tbody>
