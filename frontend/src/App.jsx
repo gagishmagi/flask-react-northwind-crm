@@ -10,7 +10,15 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:5000/products")
       .then(response => response.json())
-      .then(products => setProducts(products));
+      .then(products => {
+        setProducts(products)
+        setTimeout(() => {
+          const datatablesSimple = document.getElementById('datatablesSimple');
+          if (datatablesSimple) {
+            new simpleDatatables.DataTable(datatablesSimple);
+          } 
+        }, 1000);
+      });
   }, []);
 
   const handleCreateProduct = () => {
@@ -125,7 +133,7 @@ function App() {
                       <button onClick={editingProduct ? handleUpdateProduct : handleCreateProduct}>{editingProduct ? 'Update' : 'Add'} Product</button>
                     </div>
                   )}
-                  <table className="table table-bordered">
+                  <table id="datatablesSimple" className="table table-bordered">
                     <thead>
                       <tr>
                         <th>ID</th>
