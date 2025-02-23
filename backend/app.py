@@ -11,22 +11,14 @@ def get_db_connection():
 
 @app.route('/products', methods=['GET'])
 def get_all_products():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM PRODUCTS")
-        rows = cursor.fetchall()
-        result = [dict(zip([desc[0] for desc in cursor.description], row)) for row in rows]
-    except Exception as e:
-        app.logger.error(f"Error fetching products: {e}")
-        return jsonify({'error': 'Internal Server Error'}), 500
-    finally:
-        if conn:
-            conn.close()
+    result = get_all_product_from_db()
     return jsonify(result)
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_product_by_id(id):
+    if id <= 0:
+        return jsonify({'error': 'Invalid product ID'}), 400
+
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -103,6 +95,24 @@ def delete_product(id):
         if conn:
             conn.close()
     return jsonify({'message': 'Product deleted successfully'})
+
+
+def get_all_product_from_db():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM PRODUCTS")
+        rows = cursor.fetchall()
+        result = [dict(zip([desc[0] for desc in cursor.description], row)) for row in rows]
+    except Exception as e:
+        app.logger.error(f"Error fetching products: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        if conn:
+            conn.close()
+    return result
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
