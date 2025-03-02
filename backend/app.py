@@ -2,12 +2,32 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import psycopg2
 
+from flask_swagger_ui import get_swaggerui_blueprint
+
+SWAGGER_URL=""
+API_URL="/static/swagger.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'Access API'
+    }
+)
+
 app = Flask(__name__)
 CORS(app)
+
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 def get_db_connection():
     conn = psycopg2.connect(database="northwind", user="postgres", password="postgres", host="localhost", port=55432)
     return conn
+
+
+# @app.route('/')
+# def hello_world():
+#     return '<h1>Working...</h1>'
 
 @app.route('/products/count', methods=['GET'])
 def get_products_count():
@@ -58,8 +78,8 @@ def create_product():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO products (product_name, quantity_per_unit, unit_price, units_in_stock, discontinued) VALUES (%s, %s, %s, %s, %s)",
-                       (new_product['product_name'], new_product['quantity_per_unit'], new_product['unit_price'], new_product['units_in_stock'], new_product['discontinued']))
+        cursor.execute("INSERT INTO products (product_id,product_name, quantity_per_unit, unit_price, units_in_stock, discontinued) VALUES (%s,%s, %s, %s, %s, %s)",
+                       (new_product['product_id'],new_product['product_name'], new_product['quantity_per_unit'], new_product['unit_price'], new_product['units_in_stock'], new_product['discontinued']))
         conn.commit()
     except Exception as e:
         app.logger.error(f"Error creating product: {e}")

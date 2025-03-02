@@ -1,0 +1,95 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "CRM API",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/": {
+        "get": {
+          "description": "Returns message showing app is up",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/products/count": {
+        "get": {
+          "description": "Returns the number of products",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/products/{id}": {
+        "get": {
+          "description": "Returns a single product",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/products": {
+        "get": {
+          "description": "Returns all products",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "post": {
+          "description": "Creates a new product",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "put": {
+          "description": "Updates a product",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "delete": {
+          "description": "Deletes a product",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "204": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      }
+      
+    }
+  }
