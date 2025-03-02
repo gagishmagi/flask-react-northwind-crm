@@ -10,7 +10,7 @@ def get_db_connection():
     return conn
 
 @app.route('/products/count', methods=['GET'])
-def get_product_count():
+def get_products_count():
     result = get_products_count_from_db()
     return jsonify({'count': result})
 
@@ -102,6 +102,22 @@ def delete_product(id):
     return jsonify({'message': 'Product deleted successfully'})
 
 
+@app.route('/orders/count', methods=['GET'])
+def get_orders_count():
+    result = get_orders_count_from_db()
+    return jsonify({'count': result})
+
+@app.route('/employees/count', methods=['GET'])
+def get_employees_count():
+    result = get_employees_count_from_db()
+    return jsonify({'count': result})
+
+
+@app.route('/customers/count', methods=['GET'])
+def get_customers_count():
+    result = get_customers_count_from_db()
+    return jsonify({'count': result})
+
 def get_all_product_from_db():
     try:
         conn = get_db_connection()
@@ -117,15 +133,26 @@ def get_all_product_from_db():
             conn.close()
     return result
 
-
 def get_products_count_from_db():
+    return get_counts_from_db("products")
+
+def get_orders_count_from_db():
+    return get_counts_from_db("orders")
+
+def get_employees_count_from_db():
+    return get_counts_from_db("employees")
+
+def get_customers_count_from_db():
+    return get_counts_from_db("customers")
+
+def get_counts_from_db(type="products"):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM PRODUCTS")
+        cursor.execute(f"SELECT COUNT(*) FROM {type}")
         result = cursor.fetchone()[0]
     except Exception as e:
-        app.logger.error(f"Error fetching product count: {e}")
+        app.logger.error(f"Error fetching {type} count: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
     finally:
         if conn:
