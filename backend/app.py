@@ -9,6 +9,11 @@ def get_db_connection():
     conn = psycopg2.connect(database="northwind", user="postgres", password="postgres", host="localhost", port=55432)
     return conn
 
+@app.route('/products/count', methods=['GET'])
+def get_product_count():
+    result = get_products_count_from_db()
+    return jsonify({'count': result})
+
 @app.route('/products', methods=['GET'])
 def get_all_products():
     result = get_all_product_from_db()
@@ -111,7 +116,22 @@ def get_all_product_from_db():
         if conn:
             conn.close()
     return result
-    
+
+
+def get_products_count_from_db():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM PRODUCTS")
+        result = cursor.fetchone()[0]
+    except Exception as e:
+        app.logger.error(f"Error fetching product count: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        if conn:
+            conn.close()
+    return result
+
 
 
 if __name__ == '__main__':
